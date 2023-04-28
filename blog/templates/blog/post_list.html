@@ -89,7 +89,10 @@
                     {% endif %}
                     <div class="card-body">
                         <h2 class="card-title">{{ i.title }}</h2>
-                        <p class="card-text">{{ i.content }}</p>
+                        {% if i.hook_text %}
+                            <h5 class="text-muted">{{ i.hook_text }}</h5>
+                        {% endif %}
+                        <p class="card-text">{{ i.content | truncatewords:45 }}</p> <!-- 장고 템플릿에서 제공하는 기능으로 truncatewords를 통해 출력하고 싶은 글자수만 출력할 수 있음-->
                         <a href="{{ i.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
                     </div>
                     <div class="card-footer text-muted">
