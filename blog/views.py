@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from blog.models import Post
 
@@ -16,7 +16,10 @@ class PostList(ListView):
 #     posts = Post.objects.all().order_by('-pk') # order_by('-pk') : pk 기준 역순으로 출력
 #     return render(request, 'blog/post_list.html', {'posts': posts},)
 
-def single_post_page(request, pk):
-    post = Post.objects.get(pk=pk)
+class PostDetail(DetailView):
+    model = Post
 
-    return render(request, 'blog/single_page.html', {'post': post},)
+# def single_post_page(request, pk):
+#     post = Post.objects.get(pk=pk)
+#
+#     return render(request, 'blog/post_detail.html', {'post': post},)
