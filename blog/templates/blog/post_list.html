@@ -11,6 +11,12 @@
                     <img class="card-img-top" src="{{ i.head_image.url }}" alt="{{ i.title }}">
                 {% endif %}
                 <div class="card-body">
+                    {% if i.category %}
+                        <span class="badge badge-secondary float-right">{{ i.category }}</span>
+                    {% else %}
+                        <span class="badge badge-secondary float-right">미분류</span>
+                    {% endif %}
+
                     <h2 class="card-title">{{ i.title }}</h2>
                     {% if i.hook_text %}
                         <h5 class="text-muted">{{ i.hook_text }}</h5>
