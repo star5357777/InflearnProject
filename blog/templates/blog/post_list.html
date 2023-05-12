@@ -1,10 +1,15 @@
 {% extends 'blog/base.html' %}
 
 {% block main_area %}
-    <h1>Blog</h1>
-    {% if posts.exists %}
+    <h1>
+        Blog
+        {% if category %}
+            <span class="badge-secondary float-right">{{ category }}</span>
+        {% endif %}
+    </h1>
+    {% if post_list.exists %}
 
-        {% for i in posts %}
+        {% for i in post_list %}
             <!-- Blog Post -->
             <div class="card mb-4">
                 {% if i.head_image %}
