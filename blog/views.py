@@ -8,7 +8,7 @@ from blog.models import Post, Category
 
 class PostList(ListView):
     model = Post
-    context_object_name = 'posts'
+
     ordering = '-pk'
     template_name = 'blog/post_list.html'
 

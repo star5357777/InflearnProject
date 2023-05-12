@@ -7,6 +7,7 @@
             <span class="badge-secondary float-right">{{ category }}</span>
         {% endif %}
     </h1>
+
     {% if post_list.exists %}
 
         {% for i in post_list %}
@@ -27,6 +28,14 @@
                         <h5 class="text-muted">{{ i.hook_text }}</h5>
                     {% endif %}
                     <p class="card-text">{{ i.content | truncatewords:45 }}</p> <!-- 장고 템플릿에서 제공하는 기능으로 truncatewords를 통해 출력하고 싶은 글자수만 출력할 수 있음-->
+                    {% if i.tags.exists %}
+                        <i class="fas fa-tags"></i>
+                        {% for tag in i.tags.iterator %} {# iterator은 all이랑 같다고 볼 수 있지만 all을 사용하게 되면 느려지는 경향이 있어 iterator을 사용한다. #}
+                            <a href="{{ tag.get_absolute_url }}"><span class="badge bg-light text-dark">{{ tag }}</span></a>
+                        {% endfor %}
+                        <br>
+                        <br>
+                    {% endif %}
                     <a href="{{ i.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">

@@ -44,7 +44,7 @@ class Post(models.Model):
     # null을 했지만 카테고리 설정을 하지 않으면 저장할 때 오류가 난다. 이유는 DB에 null 값이 들어가도 상관 없다는 의미
     # form을 검사할 때 blank <- form이 비어있어도 된다를 설정하지 않으면 저장하는 과정에서 에러가 날 수 밖에 없음.
 
-    tag = models.ManyToManyField(Tag, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
     def __str__(self):
         return f'[{self.pk}] {self.title} :: {self.author} {self.content}'
 
