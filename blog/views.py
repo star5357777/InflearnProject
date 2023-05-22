@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from blog.models import Post, Category, Tag
 
 
@@ -31,14 +31,18 @@ class PostDetail(DetailView):
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
 
-class PostCreate(CreateView, LoginRequiredMixin):
+class PostCreate(CreateView, UserPassesTestMixin ,LoginRequiredMixin):
     model = Post
     fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
     template_name = 'blog/post_form.html'
 
+    def test_func(self):        # 특별한 user만 접근을 허용하고 싶다면 UserPassesTestMixin을 통해 test_fucn 함수를 사용해서 검사를 한다.
+        return self.request.user.is_superuser or self.request.user.is_staff # 요청한 user가 staff 또는 superuser 권한을 가지고 있는지.
+
+
     def form_valid(self, form): # CreateView는 form_valid 함수가 기본적으로 탑재되어 있어 override하면 된다. form valid는 form에 입력한 값이 유효한지를 검사해주는 함수이다.
         current_user = self.request.user # 요청을 보낸 사용자의 정보를 담는 것
-        if current_user.is_authenticated:
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
             form.instance.author = current_user # Post Create에서 제공하는 form의 instance에 author이라는 필드에 current_user(요청한 사용자)의 정보를 담는 것
             return super(PostCreate, self).form_valid(form)
         else:
