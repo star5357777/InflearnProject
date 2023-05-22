@@ -1,5 +1,6 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from blog.models import Post, Category, Tag
 
@@ -47,6 +48,17 @@ class PostCreate(CreateView, UserPassesTestMixin ,LoginRequiredMixin):
             return super(PostCreate, self).form_valid(form)
         else:
             return redirect('/blog/')
+
+class PostUpdate(UpdateView):
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    template_name = 'blog/post_update_form.html'
+
+    def dispatch(self, request, *args, **kwargs): # 서버에 사용자가 요청할 때 post,get 방식이 있는데 이것이 post 방식인지 get으로 요청했는지 알아내는 역할을 하는 기능. 해당하는 post 유저가 권한이 있는 유저인지 확인할 수 있다.
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied # 신기한 부분은 템플릿을 지정하지 않았는데 create에 있는 form을 그대로 사용하여 html 파일을 만들지 않아도 페이지가 나온다는
 
 
 def category_page(request, slug):
